@@ -1,3 +1,5 @@
+/* ------------------ ELEMENTS ------------------ */
+
 const statsBtn = document.getElementById("stats-btn"),
       statsPanel = document.getElementById("stats-panel"),
       statsList = document.getElementById("stats-list"),
@@ -11,7 +13,6 @@ const statsBtn = document.getElementById("stats-btn"),
       fakeWindow = document.getElementById("fake-window"),
       windowInputs = document.getElementById("window-inputs"),
       windowOk = document.getElementById("window-ok"),
-
       resetBtn = document.getElementById("reset-btn");
 
 /* ------------------ DATA ------------------ */
@@ -36,12 +37,26 @@ updateStatsList();
 statsBtn.addEventListener("click", () => statsPanel.classList.toggle("open"));
 closeStats.addEventListener("click", () => statsPanel.classList.remove("open"));
 
+/* ------------------ WEIGHTED PREDICTION ------------------ */
+
+function weightedPrediction() {
+    const total = Object.values(numberUses).reduce((a, b) => a + b, 0);
+    if (total === 0) return null;
+
+    let rand = Math.random() * total;
+
+    for (const num in numberUses) {
+        if (rand < numberUses[num]) return num;
+        rand -= numberUses[num];
+    }
+}
+
 /* ------------------ SUBMIT ------------------ */
 
 function handleSubmit() {
     const val = parseInt(input.value);
     if (!val || val < 1 || val > 10) {
-        errorMsg.textContent = "Enter 1-10!";
+        errorMsg.textContent = "Enter a number between 1 and 10!";
         return;
     }
 
@@ -56,6 +71,10 @@ function handleSubmit() {
         localStorage.setItem("numberUses", JSON.stringify(numberUses));
         updateStatsList();
 
+        const guess = weightedPrediction();
+        if (guess !== null) {
+            errorMsg.textContent = `You most likely guessed this number: ${guess}`;
+        }
 
         loadingBarContainer.style.display = "none";
         loadingBar.style.width = "0%";
@@ -68,17 +87,13 @@ input.addEventListener("keypress", e => {
     if (e.key === "Enter") handleSubmit();
 });
 
-
-
-
-
 /* ------------------ RESET ------------------ */
 
 resetBtn.addEventListener("click", () => {
     for (let i = 1; i <= 10; i++) numberUses[i] = 0;
     localStorage.setItem("numberUses", JSON.stringify(numberUses));
     updateStatsList();
-
+    errorMsg.textContent = "All data reset to 0";
 });
 
 /* ------------------ POPUP ------------------ */
@@ -101,9 +116,9 @@ function openFakeWindow() {
 openEditorBtn.addEventListener("click", openFakeWindow);
 
 windowOk.addEventListener("click", () => {
-    windowInputs.querySelectorAll("input").forEach(input => {
-        const num = input.dataset.num;
-        numberUses[num] = parseInt(input.value) || 0;
+    windowInputs.querySelectorAll("input").forEach(inp => {
+        const num = inp.dataset.num;
+        numberUses[num] = parseInt(inp.value) || 0;
     });
 
     localStorage.setItem("numberUses", JSON.stringify(numberUses));
@@ -111,12 +126,11 @@ windowOk.addEventListener("click", () => {
     fakeWindow.style.display = "none";
 });
 
-/* click outside popup */
+/* close popup */
 fakeWindow.addEventListener("click", e => {
     if (e.target === fakeWindow) fakeWindow.style.display = "none";
 });
 
-/* ESC close */
 document.addEventListener("keydown", e => {
     if (e.key === "Escape") fakeWindow.style.display = "none";
 });
