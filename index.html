@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Attempt 3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container" id="main-container">
+    <h1>Choose a number between 1 and 10</h1>
+    <input type="number" id="number-input" placeholder="Enter number..." min="1" max="10">
+    <button id="submit-btn">Submit</button>
+    <p id="error-msg" class="error"></p>
+
+    <div class="loading-bar-container">
+        <div class="loading-bar" id="loading-bar"></div>
+    </div>
+</div>
+
+<!-- Floating stats button -->
+<button id="stats-btn">📊</button>
+
+<!-- Stats side panel -->
+<div id="stats-panel">
+    <button id="close-stats">✕</button>
+
+    <h2>Number Usage</h2>
+    <ul id="stats-list"></ul>
+
+    <hr style="margin: 15px 0; border-color: #30363d;">
+
+    <h3>Custom Data Editor</h3>
+    <div id="custom-data"></div>
+
+    <!-- OPEN POPUP BUTTON -->
+    <button id="open-editor-btn" style="
+        margin-top:10px;
+        width:100%;
+        padding:8px;
+        border:none;
+        border-radius:6px;
+        background:#58a6ff;
+        color:#0d1117;
+        font-weight:bold;
+        cursor:pointer;
+    ">
+        Customize Stats
+    </button>
+
+    <button id="reset-btn" style="
+        margin-top:10px;
+        background:#ff4c4c;
+        color:#fff;
+        width:100%;
+        padding:8px;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;
+    ">
+        Reset All to 0
+    </button>
+</div>
+
+<!-- POPUP WINDOW (outside panel) -->
+<div id="fake-window">
+    <div id="window-content">
+        <h2>Edit Number Usage</h2>
+        <div id="window-inputs"></div>
+        <button id="window-ok">OK</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
